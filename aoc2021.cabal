@@ -1,0 +1,104 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           aoc2021
+version:        0.1.0.0
+author:         Bruno Iljazovic
+maintainer:     bruno.iljazovic@gmail.com
+copyright:      2021 Bruno Iljazovic
+license:        BSD3
+build-type:     Simple
+
+library
+  exposed-modules:
+      Day01
+      Day02
+      Day03
+      Day04
+      Day05
+      Day06
+      Day07
+      Day08
+      Day09
+      Day10
+      Day11
+      Day12
+      Day13
+      Util
+  other-modules:
+      Paths_aoc2021
+  hs-source-dirs:
+      src/
+  default-extensions:
+      LambdaCase
+      FlexibleContexts
+      TemplateHaskell
+      TupleSections
+      ViewPatterns
+      MultiWayIf
+      QuasiQuotes
+  ghc-options: -Wall -Wno-incomplete-patterns -Wno-unused-do-bind -Wno-missing-signatures
+  build-depends:
+      JuicyPixels
+    , arithmoi
+    , array
+    , base >=4.7 && <5
+    , containers
+    , digits
+    , fgl
+    , fixed-vector
+    , gloss
+    , lens
+    , linear
+    , megaparsec
+    , monad-loops
+    , mtl
+    , parser-combinators
+    , random
+    , scanf
+    , split
+    , transformers
+    , vector
+  default-language: Haskell2010
+
+executable aoc2021
+  main-is: Main.hs
+  other-modules:
+      Paths_aoc2021
+  hs-source-dirs:
+      ./
+  default-extensions:
+      LambdaCase
+      FlexibleContexts
+      TemplateHaskell
+      TupleSections
+      ViewPatterns
+      MultiWayIf
+      QuasiQuotes
+  ghc-options: -Wall -Wno-incomplete-patterns -Wno-unused-do-bind -Wno-missing-signatures
+  build-depends:
+      JuicyPixels
+    , aoc2021
+    , arithmoi
+    , array
+    , base >=4.7 && <5
+    , containers
+    , digits
+    , fgl
+    , fixed-vector
+    , gloss
+    , lens
+    , linear
+    , megaparsec
+    , monad-loops
+    , mtl
+    , parser-combinators
+    , random
+    , scanf
+    , split
+    , transformers
+    , vector
+  default-language: Haskell2010

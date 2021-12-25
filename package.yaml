@@ -1,0 +1,54 @@
+name:                aoc2021
+version:             0.1.0.0
+#github:              "biljazovic/Advent-of-Code-2021-Haskell"
+license:             BSD3
+author:              "Bruno Iljazovic"
+maintainer:          "bruno.iljazovic@gmail.com"
+copyright:           "2021 Bruno Iljazovic"
+
+dependencies:
+- base >= 4.7 && < 5
+- random
+- containers
+- split
+- megaparsec
+- lens
+- mtl
+- JuicyPixels
+- vector
+- linear
+- gloss
+- fgl
+- array
+- scanf
+- digits
+- monad-loops
+- transformers
+- arithmoi
+- parser-combinators
+- fixed-vector
+
+ghc-options:
+- -Wall
+- -Wno-incomplete-patterns
+- -Wno-unused-do-bind
+- -Wno-missing-signatures
+
+library:
+  source-dirs: src/
+
+default-extensions:
+- LambdaCase
+- FlexibleContexts
+- TemplateHaskell
+- TupleSections
+- ViewPatterns
+- MultiWayIf
+- QuasiQuotes
+
+executables:
+  aoc2021:
+    main: Main.hs
+    source-dirs: ./
+    dependencies:
+    - aoc2021
