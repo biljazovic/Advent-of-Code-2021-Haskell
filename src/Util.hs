@@ -24,7 +24,10 @@ module Util
     argmax,
     parseInt,
     newline,
-    freqIntMap
+    freqIntMap,
+    freqMap,
+    susedi,
+    matrixToString
   )
 where
 
@@ -33,6 +36,7 @@ import Codec.Picture
 import Control.Lens ( (^.) )
 import Control.Monad (guard)
 import Data.Array ( Ix(inRange), Array, array, listArray )
+import qualified Data.Array as Arr
 import Data.Char (isSpace)
 import Data.Graph.Inductive.Graph ( Graph(mkGraph) )
 import Data.Graph.Inductive.PatriciaTree ( Gr )
@@ -61,6 +65,11 @@ parseInt :: ReadP Int
 parseInt = read <$> ReadP.munch1 (`elem` ['0'..'9'])
 
 type CharMatrix = Array (V2 Int) Char
+
+matrixToString :: CharMatrix -> String
+matrixToString mat = unlines [ [ mat Arr.! V2 i j | j <- [y1..y2] ] | i <- [x1 .. x2] ]
+  where
+    (V2 x1 y1, V2 x2 y2) = Arr.bounds mat
 
 parseMatrix :: String -> CharMatrix
 parseMatrix strToParse =
@@ -155,3 +164,6 @@ argmax xs = fromJust $ elemIndex (maximum xs) xs
 
 freqIntMap :: [Int] -> IntMap Int
 freqIntMap = IntMap.fromListWith (+) . flip zip (repeat 1)
+
+freqMap :: Ord a => [a] -> Map a Int
+freqMap = Map.fromListWith (+) . flip zip (repeat 1)
