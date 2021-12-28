@@ -72,7 +72,6 @@ solveB (OperatorPacket _ _id subP) =
         7 -> let [a,b] = vals
               in if a == b then 1 else 0
 
--- $> main16
 main16 :: IO ()
 main16 = do
     Just input <- parseMaybe (parsePacket <* many parseBit) 

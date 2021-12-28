@@ -27,7 +27,6 @@ solveB ((x1, x2), (y1, y2)) = listCount good [ (x', y') | x' <- [-x..x], y' <- [
                     | otherwise -> vx'-1
        in ((x'+vx', y'+vy'), (vx'', vy'-1))
 
--- $> main17
 main17 :: IO ()
 main17 = do
     Just input <- parse . head . lines <$> readFile "res/input17"
