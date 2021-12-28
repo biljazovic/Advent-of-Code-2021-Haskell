@@ -5,7 +5,6 @@ import Data.Char (ord)
 import Data.Maybe (mapMaybe)
 import Data.Digits (unDigits)
 import qualified Data.Map.Strict as Map
-import Data.Map.Strict (Map)
 
 parseLine :: String -> ([String], [String])
 parseLine str = (s1, s2)

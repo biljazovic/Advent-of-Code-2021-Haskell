@@ -27,7 +27,8 @@ module Util
     freqIntMap,
     freqMap,
     susedi,
-    matrixToString
+    matrixToString,
+    iterateUntil
   )
 where
 
@@ -67,7 +68,7 @@ parseInt = read <$> ReadP.munch1 (`elem` ['0'..'9'])
 type CharMatrix = Array (V2 Int) Char
 
 matrixToString :: CharMatrix -> String
-matrixToString mat = unlines [ [ mat Arr.! V2 i j | j <- [y1..y2] ] | i <- [x1 .. x2] ]
+matrixToString mat = unlines [ [ mat Arr.! V2 i j | j <- [y1..y2] ] | i <- [x1..x2] ]
   where
     (V2 x1 y1, V2 x2 y2) = Arr.bounds mat
 
@@ -165,5 +166,14 @@ argmax xs = fromJust $ elemIndex (maximum xs) xs
 freqIntMap :: [Int] -> IntMap Int
 freqIntMap = IntMap.fromListWith (+) . flip zip (repeat 1)
 
+-- | Returns a map of element frequencies from input list
 freqMap :: Ord a => [a] -> Map a Int
 freqMap = Map.fromListWith (+) . flip zip (repeat 1)
+
+-- | stopCondition takes two consecutive values and returns whether to
+-- stop the iteration or not
+iterateUntil :: ((a, a) -> Bool) -> (a -> a) -> a -> [a]
+iterateUntil stopCondition f start = let next = f start
+                                      in if stopCondition (start, next)
+                                            then [start,next]
+                                            else start : iterateUntil stopCondition f next

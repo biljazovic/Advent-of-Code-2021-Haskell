@@ -1,8 +1,6 @@
 module Day07 (main07) where
 
 import Util ( sort, splitOn )
-import qualified Data.IntMap.Strict as IntMap
-import Data.IntMap.Strict (IntMap)
 
 solveA it = let sit = sort it
                 cost s = sum $ map (abs . (s-)) it
