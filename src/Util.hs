@@ -29,7 +29,7 @@ module Util
     susedi,
     matrixToString,
     iterateUntil
-  )
+  ,traceVar,unorderedPairs)
 where
 
 import Codec.Picture
@@ -58,6 +58,7 @@ import qualified Data.IntMap.Strict as IntMap
 import Data.IntMap.Strict (IntMap)
 import Control.Arrow ((>>>))
 import Data.Function ((&))
+import Debug.Trace (trace)
 
 newline :: ReadP ()
 newline = ReadP.char '\n' $> ()
@@ -177,3 +178,9 @@ iterateUntil stopCondition f start = let next = f start
                                       in if stopCondition (start, next)
                                             then [start,next]
                                             else start : iterateUntil stopCondition f next
+
+traceVar :: Show a => a -> a
+traceVar x = trace (show x) x
+
+unorderedPairs :: [a] -> [(a,a)]
+unorderedPairs xs = [ (xs !! i, xs !! j) | i <- [0 .. length xs-1], j <- [i .. length xs-1] ]

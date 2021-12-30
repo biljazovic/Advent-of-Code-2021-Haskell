@@ -32,6 +32,7 @@ library
       Day16
       Day17
       Day18
+      Day19
       Util
   other-modules:
       Paths_aoc2021
@@ -61,6 +62,7 @@ library
     , megaparsec
     , monad-loops
     , mtl
+    , multiset
     , parser-combinators
     , random
     , scanf
@@ -100,6 +102,7 @@ executable aoc2021
     , megaparsec
     , monad-loops
     , mtl
+    , multiset
     , parser-combinators
     , random
     , scanf

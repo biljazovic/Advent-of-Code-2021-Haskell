@@ -27,6 +27,7 @@ dependencies:
 - arithmoi
 - parser-combinators
 - fixed-vector
+- multiset
 
 ghc-options:
 - -Wall
