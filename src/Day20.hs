@@ -3,7 +3,6 @@ module Day20 (main20) where
 import Util
 import Data.Digits (unDigits)
 import qualified Data.Array as Arr
-import Data.Ix (inRange)
 
 type Image = (CharMatrix, Char)
 
@@ -12,25 +11,20 @@ type IT = (String, CharMatrix)
 allBetween :: (V2 Int, V2 Int) -> [V2 Int]
 allBetween (V2 x1 y1, V2 x2 y2) = [ V2 x y | x <- [x1..x2], y <- [y1..y2] ]
 
-arrLookup :: Arr.Ix i => e -> Arr.Array i e -> i -> e
-arrLookup d arr p = if inRange (Arr.bounds arr) p
-                     then arr Arr.! p
-                     else d
-
 expandEmpty :: Image -> CharMatrix
 expandEmpty (img, c) = img'
   where
     (ul, dr) = Arr.bounds img
     bounds' = (ul - V2 1 1, dr + V2 1 1)
     img' = Arr.array bounds' $ map (\p -> (p, toChar p)) (allBetween bounds')
-    toChar p = arrLookup c img p
+    toChar p = arrLookupWithDefault c img p
 
 mySusedi :: V2 Int -> [V2 Int]
 mySusedi (V2 x y) = concat [ [ V2 x' y' | y' <- [y-1..y+1] ] | x' <- [x-1..x+1] ]
 
 code :: Image -> V2 Int -> Int
 code (img, c) p = mySusedi p 
-                  & map (arrLookup c img) 
+                  & map (arrLookupWithDefault c img) 
                   & map toBit
                   & unDigits 2
 

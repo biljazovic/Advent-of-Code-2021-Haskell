@@ -34,6 +34,7 @@ library
       Day18
       Day19
       Day20
+      Day21
       Util
   other-modules:
       Paths_aoc2021
@@ -47,6 +48,7 @@ library
       ViewPatterns
       MultiWayIf
       QuasiQuotes
+      NamedFieldPuns
   ghc-options: -Wall -Wno-incomplete-patterns -Wno-unused-do-bind -Wno-missing-signatures
   build-depends:
       JuicyPixels
@@ -61,6 +63,7 @@ library
     , lens
     , linear
     , megaparsec
+    , memoize
     , monad-loops
     , mtl
     , multiset
@@ -86,6 +89,7 @@ executable aoc2021
       ViewPatterns
       MultiWayIf
       QuasiQuotes
+      NamedFieldPuns
   ghc-options: -Wall -Wno-incomplete-patterns -Wno-unused-do-bind -Wno-missing-signatures
   build-depends:
       JuicyPixels
@@ -101,6 +105,7 @@ executable aoc2021
     , lens
     , linear
     , megaparsec
+    , memoize
     , monad-loops
     , mtl
     , multiset

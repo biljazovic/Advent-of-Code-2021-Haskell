@@ -28,9 +28,11 @@ module Util
     freqMap,
     susedi,
     matrixToString,
-    iterateUntil
-  ,traceVar,unorderedPairs)
-where
+    iterateUntil,
+    traceVar,
+    unorderedPairs,
+    arrLookupWithDefault
+  ) where
 
 import Codec.Picture
     ( saveBmpImage, generateImage, DynamicImage(ImageRGB8), PixelRGB8(..) )
@@ -184,3 +186,8 @@ traceVar x = trace (show x) x
 
 unorderedPairs :: [a] -> [(a,a)]
 unorderedPairs xs = [ (xs !! i, xs !! j) | i <- [0 .. length xs-1], j <- [i .. length xs-1] ]
+
+arrLookupWithDefault :: Arr.Ix i => e -> Arr.Array i e -> i -> e
+arrLookupWithDefault d arr p = if inRange (Arr.bounds arr) p
+                     then arr Arr.! p
+                     else d
