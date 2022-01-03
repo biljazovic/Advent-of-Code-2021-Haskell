@@ -29,12 +29,17 @@ dependencies:
 - fixed-vector
 - multiset
 - memoize
+- bimap
+- massiv
 
 ghc-options:
 - -Wall
 - -Wno-incomplete-patterns
 - -Wno-unused-do-bind
 - -Wno-missing-signatures
+- -O2
+- -threaded
+- -with-rtsopts=-N
 
 library:
   source-dirs: src/

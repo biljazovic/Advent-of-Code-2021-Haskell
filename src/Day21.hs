@@ -47,8 +47,8 @@ deriveMemoizable ''GameState
 
 solveB :: GameState -> V2 Integer
 solveB = go' (1::Int)
-  where 
-    go' = memoFix2 $ \go turn gameState 
+  where
+    go' = memoFix2 $ \go turn gameState
            -> sum $ do
             roll <- sum <$> replicateM 3 [1..dieSizeB]
             let gameState' = step roll gameState

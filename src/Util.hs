@@ -31,7 +31,8 @@ module Util
     iterateUntil,
     traceVar,
     unorderedPairs,
-    arrLookupWithDefault
+    arrLookupWithDefault,
+    mkUniq
   ) where
 
 import Codec.Picture
@@ -191,3 +192,6 @@ arrLookupWithDefault :: Arr.Ix i => e -> Arr.Array i e -> i -> e
 arrLookupWithDefault d arr p = if inRange (Arr.bounds arr) p
                      then arr Arr.! p
                      else d
+
+mkUniq :: (Ord a) => [a] -> [a]
+mkUniq = map head . group . sort
