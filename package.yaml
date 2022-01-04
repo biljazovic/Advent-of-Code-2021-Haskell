@@ -31,6 +31,11 @@ dependencies:
 - memoize
 - bimap
 - massiv
+- unordered-containers
+- pqueue
+- hashable
+- string-qq
+- ansi-terminal
 
 ghc-options:
 - -Wall
@@ -53,6 +58,7 @@ default-extensions:
 - MultiWayIf
 - QuasiQuotes
 - NamedFieldPuns
+- FlexibleInstances
 
 executables:
   aoc2021:

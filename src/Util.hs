@@ -15,7 +15,6 @@ module Util
     generateGraph,
     susedi4,
     susedi8,
-    genericBfs,
     listToArray,
     listCount,
     inBounds,
@@ -32,13 +31,16 @@ module Util
     traceVar,
     unorderedPairs,
     arrLookupWithDefault,
-    mkUniq
+    mkUniq,
+    showAnimation,
+    dijkstra,
+    genericBfs
   ) where
 
 import Codec.Picture
     ( saveBmpImage, generateImage, DynamicImage(ImageRGB8), PixelRGB8(..) )
 import Control.Lens ( (^.) )
-import Control.Monad (guard)
+import Control.Monad (guard, forM_)
 import Data.Array ( Ix(inRange), Array, array, listArray )
 import qualified Data.Array as Arr
 import Data.Char (isSpace)
@@ -49,7 +51,6 @@ import Data.List.Split (splitOn)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe, fromJust)
-import qualified Data.Sequence as Seq
 import qualified Data.Set as Set
 import Data.Void (Void)
 import Linear.V2
@@ -62,6 +63,14 @@ import Data.IntMap.Strict (IntMap)
 import Control.Arrow ((>>>))
 import Data.Function ((&))
 import Debug.Trace (trace)
+
+import qualified Data.PQueue.Prio.Min as PQ
+import qualified Data.HashSet as HashSet
+import qualified Data.HashMap.Strict as HashMap
+import Data.Hashable (Hashable)
+import System.Console.ANSI
+import Control.Concurrent (threadDelay)
+import qualified Data.Sequence as Seq
 
 newline :: ReadP ()
 newline = ReadP.char '\n' $> ()
@@ -79,13 +88,35 @@ matrixToString mat = unlines [ [ mat Arr.! V2 i j | j <- [y1..y2] ] | i <- [x1..
 parseMatrix :: String -> CharMatrix
 parseMatrix strToParse =
   let strs = filter (not . emptyLine) $ lines strToParse
+      strs' = map fillWithSpaces strs
+      fillWithSpaces str = str ++ replicate (m - length str) ' '
       n = length strs
-      m = length $ head strs
-      lst = concat $ [[(V2 i j, ch) | (ch, j) <- zip str [0 ..]] | (str, i) <- zip strs [0 ..]]
+      m = maximum $ map length strs
+      lst = concat $ [[(V2 i j, ch) | (ch, j) <- zip str [0 ..]] | (str, i) <- zip strs' [0 ..]]
    in array (V2 0 0, V2 (n -1) (m -1)) lst
 
 sepBy1_ :: MonadParsec e s m => m a -> m sep -> m [a]
 sepBy1_ p sep = (:) <$> try p <*> many (try (sep *> p))
+
+dijkstra :: (Eq a, Hashable a) => a -> (a -> Bool) -> (a -> [(a, Int)]) -> Maybe Int
+dijkstra start goal neigh = go HashSet.empty (HashMap.singleton start 0) (PQ.singleton 0 start)
+  where
+    go seen dists queue = do
+      ((curDist, cur), rest) <- PQ.minViewWithKey queue
+      if | HashSet.member cur seen -> go seen dists rest
+         | goal cur -> Just curDist
+         | otherwise -> let neighs = neigh cur
+                            newSeen = HashSet.insert cur seen
+                            f (other, toOther) = let newDist = curDist + toOther
+                              in case dists HashMap.!? other of
+                                   Nothing -> Just (other, newDist)
+                                   Just otherDist -> if newDist < otherDist
+                                                        then Just (other, newDist)
+                                                        else Nothing
+                            forAdd = mapMaybe f neighs
+                            newDists = foldr (\(x, d) m -> HashMap.insert x d m) dists forAdd
+                            newQ = foldr (\(x, d) q -> PQ.insert d x q) rest forAdd
+                         in go newSeen newDists newQ
 
 genericBfs ::
   Ord a =>
@@ -120,7 +151,7 @@ generateBlackAndWhiteImage filename defaultValue mapa toColor = saveBmpImage fil
     [minY, maxY] = map ($ coordsy) [Set.findMin, Set.findMax]
 
 susedi :: [V2 Int] -> Maybe (V2 Int, V2 Int) -> V2 Int -> [V2 Int]
-susedi dirs limits s = filter f $ map (+ s) dirs 
+susedi dirs limits s = filter f $ map (+ s) dirs
   where
     f x = case limits of
       Nothing -> True
@@ -195,3 +226,9 @@ arrLookupWithDefault d arr p = if inRange (Arr.bounds arr) p
 
 mkUniq :: (Ord a) => [a] -> [a]
 mkUniq = map head . group . sort
+
+showAnimation :: [String] -> IO ()
+showAnimation strs = forM_ strs $ \str -> do
+  clearScreen
+  putStr str
+  threadDelay 1000000

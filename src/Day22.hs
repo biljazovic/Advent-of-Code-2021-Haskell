@@ -74,7 +74,6 @@ solveB arr (_, bimaps) = Massiv.sum $ Massiv.imap (\t b -> if b then cubeSize t 
     cubeSize (x, y, z) = let f bimap xyz = toInteger $ bimap !> (xyz+1) - bimap !> xyz
                           in product $ zipWith f (toList bimaps) [x,y,z]
 
--- $> main22
 main22 :: IO ()
 main22 = do
     input <- compress . mapMaybe parse . lines <$> readFile "res/input22"
