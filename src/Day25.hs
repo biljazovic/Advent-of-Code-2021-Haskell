@@ -19,7 +19,6 @@ step = stepInDir '>' moveEast >>> stepInDir 'v' moveSouth
 
 solve = pred . length . iterateUntil (uncurry (==)) step
 
--- $> main25
 main25 :: IO ()
 main25 = do
     input <- parseMatrix <$> readFile "res/input25"
