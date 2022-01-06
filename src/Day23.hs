@@ -64,7 +64,7 @@ isGoal mat = all isGoalForInd [0..3]
     isGoalForInd ind = all ((== (svi !! ind)) . (mat !)) $ homeIndices mat ind
 
 instance Hashable (Array (V2 Int) Char) where
-  hashWithSalt = hashUsing (filter (snd >>> (`elem` "ABCD")) . Arr.assocs)
+  hashWithSalt = hashUsing Arr.assocs
 
 solve :: CharMatrix -> Maybe Int
 solve mat = dijkstra mat isGoal matrixSusedi

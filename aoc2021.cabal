@@ -37,6 +37,8 @@ library
       Day21
       Day22
       Day23
+      Day24
+      Day25
       Util
   other-modules:
       Paths_aoc2021

@@ -34,7 +34,8 @@ module Util
     mkUniq,
     showAnimation,
     dijkstra,
-    genericBfs
+    genericBfs,
+    astar
   ) where
 
 import Codec.Picture
@@ -50,7 +51,7 @@ import Data.List
 import Data.List.Split (splitOn)
 import Data.Map (Map)
 import qualified Data.Map as Map
-import Data.Maybe (mapMaybe, fromJust)
+import Data.Maybe (mapMaybe, fromJust, maybeToList)
 import qualified Data.Set as Set
 import Data.Void (Void)
 import Linear.V2
@@ -108,14 +109,30 @@ dijkstra start goal neigh = go HashSet.empty (HashMap.singleton start 0) (PQ.sin
          | otherwise -> let neighs = neigh cur
                             newSeen = HashSet.insert cur seen
                             f (other, toOther) = let newDist = curDist + toOther
-                              in case dists HashMap.!? other of
-                                   Nothing -> Just (other, newDist)
-                                   Just otherDist -> if newDist < otherDist
-                                                        then Just (other, newDist)
-                                                        else Nothing
+                              in if all (> newDist) $ maybeToList (dists HashMap.!? other)
+                                    then Just (other, newDist)
+                                    else Nothing
                             forAdd = mapMaybe f neighs
                             newDists = foldr (\(x, d) m -> HashMap.insert x d m) dists forAdd
                             newQ = foldr (\(x, d) q -> PQ.insert d x q) rest forAdd
+                         in go newSeen newDists newQ
+
+astar :: (Eq a, Hashable a) => a -> (a -> Bool) -> (a -> [(a, Int)]) -> (a -> Int) -> Maybe Int
+astar start goal neigh heuristic = go HashSet.empty (HashMap.singleton start 0) (PQ.singleton (heuristic start) start)
+  where
+    go seen dists queue = do
+      ((curDist, cur), rest) <- PQ.minViewWithKey queue
+      if | HashSet.member cur seen -> go seen dists rest
+         | goal cur -> Just curDist
+         | otherwise -> let neighs = neigh cur
+                            newSeen = HashSet.insert cur seen
+                            f (other, toOther) = let newDist = curDist + toOther
+                              in if all (> newDist) $ maybeToList (dists HashMap.!? other)
+                                    then Just (other, newDist)
+                                    else Nothing
+                            forAdd = mapMaybe f neighs
+                            newDists = foldr (\(x, d) m -> HashMap.insert x d m) dists forAdd
+                            newQ = foldr (\(x, d) q -> PQ.insert (d + heuristic x) x q) rest forAdd
                          in go newSeen newDists newQ
 
 genericBfs ::
