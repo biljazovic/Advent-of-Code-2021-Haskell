@@ -5,3 +5,4 @@ dist-newstyle/*
 .gitattributes
 template.hs
 newDay.sh
+res
